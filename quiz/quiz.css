@@ -1,0 +1,15 @@
+:root{--navy:#10283f;--teal:#22b8b2;--ink:#203449;--muted:#637386;--paper:#f3f6f7;--line:#dbe3e7}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Arial,Helvetica,sans-serif}
+.top{background:var(--navy);color:white;padding:18px max(22px,calc((100% - 920px)/2));display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:12px;letter-spacing:.12em}
+.brand{font-weight:800;color:white;text-decoration:none;font-size:16px}.brand span{font-weight:400;color:#9de7e2}
+main{max-width:760px;margin:42px auto;padding:0 20px}.eyebrow{font-size:12px;letter-spacing:.15em;font-weight:700;color:#128c8a}
+h1{font-size:clamp(38px,7vw,62px);letter-spacing:-.045em;line-height:1.05;color:var(--navy);margin:10px 0}.intro{color:var(--muted);margin-bottom:28px}
+.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:24px;margin:18px 0;box-shadow:0 8px 28px #10283f0a}
+h2{color:var(--navy);font-size:21px;margin:0 0 18px}label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px}
+input{width:100%;padding:13px 14px;border:1px solid #c8d4db;border-radius:8px;font:inherit;color:var(--ink)}
+button{background:var(--navy);color:white;border:0;border-radius:8px;padding:13px 18px;font:700 15px inherit;cursor:pointer;margin-top:16px}
+button:hover{filter:brightness(1.12)}button:focus-visible,input:focus-visible{outline:3px solid #22b8b277;outline-offset:2px}
+.secondary{background:#e6f5f4;color:var(--navy);margin:0}.meta{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--muted);font-size:14px}
+.options{display:grid;gap:10px}.option{margin:0;text-align:left;background:#f4f7f8;color:var(--ink);border:1px solid var(--line);font-weight:600}.option:hover{background:#e7f7f6;border-color:var(--teal)}
+.hint{font-size:13px;color:var(--muted)}.hidden{display:none}#feedback{font-weight:700}#status{min-height:24px;color:var(--muted);font-size:14px}li{padding:5px 0}footer{text-align:center;padding:28px;color:var(--muted);font-size:13px}
+@media(max-width:520px){.top{padding:16px 20px}.panel{padding:18px}main{margin-top:28px}}
