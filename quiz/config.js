@@ -3,6 +3,6 @@
  * Não coloque aqui service_role nem qualquer chave secreta.
  */
 window.GAMES_MNE_CONFIG = {
-  SUPABASE_URL: "COLE_AQUI_A_PROJECT_URL",
-  SUPABASE_ANON_KEY: "COLE_AQUI_A_CHAVE_PUBLICA"
+  SUPABASE_URL: "https://omnyrzekwyarklkhhiwm.supabase.co/rest/v1/",
+  SUPABASE_ANON_KEY: "sb_publishable_y1AFRgn8ud1TvO1nWQw42Q_uh21Ns50"
 };
