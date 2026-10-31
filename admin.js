@@ -8,6 +8,7 @@
   let campaigns = [];
   let selectedCampaignId = null;
   let currentQuestionCount = 0;
+  let questionLoadToken = 0;
 
   const statusText = {
     draft: "Rascunho",
@@ -105,12 +106,12 @@
   // CONTROLE DO LIMITE DE PERGUNTAS
 
   function updateQuestionCounter(count) {
-    currentQuestionCount = count;
+    currentQuestionCount = Number(count) || 0;
 
     const counter = $("question-count");
 
     if (counter) {
-      counter.textContent = `${count}/${MAX_QUESTIONS} perguntas cadastradas`;
+      counter.textContent = `${currentQuestionCount}/${MAX_QUESTIONS} perguntas cadastradas`;
     }
 
     updateQuestionButton();
@@ -499,14 +500,16 @@
   // CARREGAR PERGUNTAS E ATUALIZAR CONTADOR
 
   async function loadQuestions() {
-    const cid =
-      $("question-campaign").value || selectedCampaignId;
+    // Evita que uma consulta antiga sobrescreva o contador/lista de uma
+    // consulta mais recente (por exemplo, durante a troca de campanha).
+    const loadToken = ++questionLoadToken;
+    const cid = $("question-campaign").value || selectedCampaignId;
 
     if (!cid) {
       $("question-list").innerHTML =
         '<p class="muted">Selecione uma campanha.</p>';
-
       updateQuestionCounter(0);
+      $("position").value = 1;
       return;
     }
 
@@ -516,25 +519,28 @@
       .from("mne_quiz_questions")
       .select("*")
       .eq("campaign_id", cid)
-      .order("position");
+      .order("position", { ascending: true });
+
+    // Se outra carga começou depois desta, descarta esta resposta.
+    if (loadToken !== questionLoadToken) return;
 
     if (error) {
       $("question-list").innerHTML =
         `<p class="message error">${esc(error.message)}</p>`;
-
+      say("admin-message", error.message, "error");
       return;
     }
 
-    const questions = data || [];
+    const questions = Array.isArray(data) ? data : [];
 
+    // O contador é calculado da mesma lista usada para desenhar a tela.
     updateQuestionCounter(questions.length);
 
     $("question-list").innerHTML = "";
 
-    if (!questions.length) {
+    if (questions.length === 0) {
       $("question-list").innerHTML =
         '<p class="muted">Ainda não há perguntas nesta campanha.</p>';
-
       $("position").value = 1;
       return;
     }
@@ -545,35 +551,23 @@
 
       el.innerHTML = `
         <div>
-          <p>
-            <b>${q.position}. ${esc(q.prompt)}</b>
-          </p>
-
+          <p><b>${Number(q.position) || 0}. ${esc(q.prompt)}</b></p>
           <small>
             ${
               q.question_type === "true_false"
                 ? "Verdadeiro ou falso"
                 : "Múltipla escolha"
             }
-            · ${q.points} pontos
+            · ${Number(q.points) || 0} pontos
             · ${q.is_published ? "Publicada" : "Rascunho"}
           </small>
         </div>
 
         <div class="actions">
-          <button
-            class="secondary"
-            data-qaction="edit"
-            data-id="${q.id}"
-          >
+          <button class="secondary" data-qaction="edit" data-id="${q.id}">
             Editar
           </button>
-
-          <button
-            class="danger"
-            data-qaction="delete"
-            data-id="${q.id}"
-          >
+          <button class="danger" data-qaction="delete" data-id="${q.id}">
             Excluir
           </button>
         </div>
@@ -582,8 +576,22 @@
       $("question-list").appendChild(el);
     });
 
+    // Atualiza a próxima posição sem alterar o contador.
     try {
-      await nextQuestionPosition(cid);
+      const { data: lastQuestion, error: positionError } = await db
+        .from("mne_quiz_questions")
+        .select("position")
+        .eq("campaign_id", cid)
+        .order("position", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (loadToken !== questionLoadToken) return;
+      if (positionError) throw positionError;
+
+      $("position").value = lastQuestion
+        ? Number(lastQuestion.position) + 1
+        : 1;
     } catch (e) {
       say(
         "admin-message",
