@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -10,87 +11,225 @@
   <script src="quiz/config.js"></script>
   <script src="admin.js" defer></script>
 </head>
+
 <body>
+
 <header class="topbar">
   <a class="brand" href="./">GAMES <b>MNE</b></a>
   <span>PAINEL ADMINISTRATIVO</span>
 </header>
+
 <main class="wrap">
+
+  <!-- LOGIN -->
   <section id="login-panel" class="panel narrow">
     <p class="eyebrow">ACESSO RESTRITO</p>
     <h1>Entrar na administração</h1>
-    <p class="muted">Use o e-mail e a senha do usuário autorizado no Supabase.</p>
+    <p class="muted">
+      Use o e-mail e a senha do usuário autorizado no Supabase.
+    </p>
+
     <form id="login-form">
       <label for="email">E-mail</label>
       <input id="email" type="email" autocomplete="username" required>
+
       <label for="password">Senha</label>
       <input id="password" type="password" autocomplete="current-password" required>
+
       <button type="submit">Entrar</button>
     </form>
+
     <p id="login-message" class="message" role="status"></p>
   </section>
 
+  <!-- PAINEL ADMINISTRATIVO -->
   <section id="admin-panel" class="hidden">
+
     <div class="page-head">
-      <div><p class="eyebrow">GAMES MNE</p><h1>Gerenciar quizzes</h1><p class="muted">Crie campanhas, organize perguntas e publique quando estiver tudo pronto.</p></div>
+      <div>
+        <p class="eyebrow">GAMES MNE</p>
+        <h1>Gerenciar quizzes</h1>
+        <p class="muted">
+          Crie campanhas, organize perguntas e publique quando estiver tudo pronto.
+        </p>
+      </div>
+
       <button id="logout" class="secondary">Sair</button>
     </div>
+
     <p id="admin-message" class="message" role="status"></p>
+
     <div class="columns">
+
+      <!-- FORMULÁRIO DE CAMPANHA -->
       <section class="panel">
         <h2 id="campaign-form-title">Nova campanha</h2>
+
         <form id="campaign-form">
           <input id="campaign-id" type="hidden">
+
           <label for="campaign-title">Título</label>
-          <input id="campaign-title" maxlength="120" required placeholder="Ex.: Dia da Qualidade 2026">
+          <input
+            id="campaign-title"
+            maxlength="120"
+            required
+            placeholder="Ex.: Dia da Qualidade 2026"
+          >
+
           <label for="campaign-code">Código de acesso</label>
-          <input id="campaign-code" maxlength="80" required placeholder="DIA-DA-QUALIDADE-2026">
+          <input
+            id="campaign-code"
+            maxlength="80"
+            required
+            placeholder="DIA-DA-QUALIDADE-2026"
+          >
+
           <label for="campaign-description">Descrição</label>
-          <textarea id="campaign-description" rows="3" placeholder="Objetivo da campanha"></textarea>
+          <textarea
+            id="campaign-description"
+            rows="3"
+            placeholder="Objetivo da campanha"
+          ></textarea>
+
           <label for="seconds">Tempo por pergunta (segundos)</label>
-          <input id="seconds" type="number" min="5" max="600" value="20" required>
-          <div class="actions"><button type="submit">Salvar campanha</button><button type="button" id="cancel-campaign" class="secondary">Limpar</button></div>
+          <input
+            id="seconds"
+            type="number"
+            min="5"
+            max="600"
+            value="20"
+            required
+          >
+
+          <div class="actions">
+            <button type="submit">Salvar campanha</button>
+            <button type="button" id="cancel-campaign" class="secondary">
+              Limpar
+            </button>
+          </div>
         </form>
       </section>
+
+      <!-- FORMULÁRIO DE PERGUNTAS -->
       <section class="panel">
         <h2>Pergunta da campanha</h2>
-        <p class="muted">Selecione uma campanha na lista para adicionar perguntas.</p>
+
+        <p class="muted">
+          Selecione uma campanha na lista para adicionar perguntas.
+          Cada campanha permite até 20 perguntas.
+        </p>
+
         <form id="question-form">
           <input id="question-id" type="hidden">
+
           <label for="question-campaign">Campanha</label>
           <select id="question-campaign" required></select>
+
           <label for="question-prompt">Enunciado</label>
-          <textarea id="question-prompt" rows="3" required placeholder="Digite a pergunta"></textarea>
+          <textarea
+            id="question-prompt"
+            rows="3"
+            required
+            placeholder="Digite a pergunta"
+          ></textarea>
+
           <label for="question-type">Tipo</label>
           <select id="question-type">
             <option value="multiple_choice">Múltipla escolha</option>
             <option value="true_false">Verdadeiro ou falso</option>
           </select>
+
           <div id="mc-options">
-            <label for="option-a">Alternativa A</label><input id="option-a" maxlength="240">
-            <label for="option-b">Alternativa B</label><input id="option-b" maxlength="240">
-            <label for="option-c">Alternativa C (opcional)</label><input id="option-c" maxlength="240">
-            <label for="option-d">Alternativa D (opcional)</label><input id="option-d" maxlength="240">
+            <label for="option-a">Alternativa A</label>
+            <input id="option-a" maxlength="240">
+
+            <label for="option-b">Alternativa B</label>
+            <input id="option-b" maxlength="240">
+
+            <label for="option-c">Alternativa C (opcional)</label>
+            <input id="option-c" maxlength="240">
+
+            <label for="option-d">Alternativa D (opcional)</label>
+            <input id="option-d" maxlength="240">
           </div>
+
           <label for="correct-answer">Resposta correta</label>
           <select id="correct-answer" required></select>
-          <label for="points">Pontos</label><input id="points" type="number" min="0" max="10000" value="10" required>
-          <label for="position">Posição</label><input id="position" type="number" min="1" value="1" required>
-          <label class="check"><input id="question-published" type="checkbox"> Pergunta publicada</label>
-          <div class="actions"><button type="submit">Salvar pergunta</button><button type="button" id="cancel-question" class="secondary">Limpar</button></div>
+
+          <label for="points">Pontos</label>
+          <input
+            id="points"
+            type="number"
+            min="0"
+            max="10000"
+            value="10"
+            required
+          >
+
+          <label for="position">Posição</label>
+          <input
+            id="position"
+            type="number"
+            min="1"
+            value="1"
+            required
+          >
+
+          <label class="check">
+            <input id="question-published" type="checkbox">
+            Pergunta publicada
+          </label>
+
+          <div class="actions">
+            <button type="submit">Salvar pergunta</button>
+            <button type="button" id="cancel-question" class="secondary">
+              Limpar
+            </button>
+          </div>
         </form>
       </section>
+
     </div>
+
+    <!-- LISTA DE CAMPANHAS -->
     <section class="panel">
-      <div class="list-heading"><div><h2>Campanhas</h2><p class="muted">Rascunho, publicação, encerramento e arquivo.</p></div><button id="reload" class="secondary">Atualizar lista</button></div>
-      <div id="campaign-list" class="campaign-list"><p class="muted">Carregando campanhas…</p></div>
+      <div class="list-heading">
+        <div>
+          <h2>Campanhas</h2>
+          <p class="muted">
+            Rascunho, publicação, encerramento e arquivo.
+          </p>
+        </div>
+
+        <button id="reload" class="secondary">Atualizar lista</button>
+      </div>
+
+      <div id="campaign-list" class="campaign-list">
+        <p class="muted">Carregando campanhas…</p>
+      </div>
     </section>
+
+    <!-- LISTA DE PERGUNTAS E CONTADOR -->
     <section class="panel">
-      <h2>Perguntas da campanha selecionada</h2>
-      <div id="question-list"><p class="muted">Selecione uma campanha.</p></div>
+      <div class="list-heading">
+        <div>
+          <h2>Perguntas da campanha selecionada</h2>
+          <p id="question-count" class="muted">
+            0/20 perguntas cadastradas
+          </p>
+        </div>
+      </div>
+
+      <div id="question-list">
+        <p class="muted">Selecione uma campanha.</p>
+      </div>
     </section>
+
   </section>
+
 </main>
+
 <footer>Monitore Negócios · Games MNE</footer>
+
 </body>
 </html>
